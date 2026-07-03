@@ -29,5 +29,14 @@ public class DNSRecordService {
             return repository.save(dnsRecord);
     }
 
+    public String getIpAddress(String domainName){
+        if(domainName == null || domainName.isBlank()) throw new IllegalArgumentException("domain name can't be empty");
+        DnsRecord record = repository.findByDomainName(domainName);
+        if(record == null){
+            throw new IllegalArgumentException("no domain exist");
+        }
+        return record.getIpAddress();
+    }
+
 
 }
