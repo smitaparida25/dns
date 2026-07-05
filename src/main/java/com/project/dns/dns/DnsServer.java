@@ -1,5 +1,6 @@
 package com.project.dns.dns;
 
+import com.project.dns.entity.DnsRecord;
 import com.project.dns.repository.DNSRecordRepository;
 import org.springframework.stereotype.Component;
 
@@ -48,6 +49,12 @@ public class DnsServer {
                 domainName.deleteCharAt(domainName.length() - 1);
             }
             System.out.println(domainName.toString());
+            DnsRecord record = dnsRecordRepository.findByDomainName(domainName.toString());
+            if (record == null) {
+                System.out.println("Domain not found");
+            }else{
+            System.out.println(record.getIpAddress());
+            }
         }
     }
 }
