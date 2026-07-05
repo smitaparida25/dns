@@ -38,5 +38,4 @@ public class DNSRecordService {
         return record.getIpAddress();
     }
 
-
 }
