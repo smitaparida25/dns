@@ -115,6 +115,15 @@ public class DnsServer {
                 response[index++] = (byte) Integer.parseInt(part);
             }
 
+            DatagramPacket responsePacket = new DatagramPacket(
+                    response,
+                    index,
+                    datagramPacket.getAddress(),
+                    datagramPacket.getPort()
+            );
+            datagramSocket.send(responsePacket);
+
+
         }
     }
 }
