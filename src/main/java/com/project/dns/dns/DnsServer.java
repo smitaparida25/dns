@@ -52,9 +52,69 @@ public class DnsServer {
             DnsRecord record = dnsRecordRepository.findByDomainName(domainName.toString());
             if (record == null) {
                 System.out.println("Domain not found");
-            }else{
-            System.out.println(record.getIpAddress());
+                continue;
             }
+            System.out.println(record.getIpAddress());
+
+            byte[] response = new byte[512];
+
+            // first two bytes are same
+            response[0] = data[0];
+            response[1] = data[1];
+
+            // flag which tells the sender that this is a successful response
+            response[2] = (byte) 0x81;
+            response[3] = (byte) 0x80;
+
+            // question count
+            response[4] = 0;
+            response[5] = 1;
+
+            // answer count
+            response[6] = 0;
+            response[7] = 1;
+
+            // as of right now no additional stuff
+            response[8] = 0;
+            response[9] = 0;
+            response[10] = 0;
+            response[11] = 0;
+
+            // copy the question
+           for(int j = 12; j<=i+4; j++){
+               response[j] = data[j];
+           }
+           int index = i+5;
+           // name of domain
+            response[index++] = (byte) 0xC0;
+            response[index++] = 0x0C;
+
+            // type of record -> ipv4 -> A record
+            response[index++] = 0;
+            response[index++] = 1;
+
+            // what network class -> in (internet)
+            response[index++] = 0;
+            response[index++] = 1;
+
+            // ttl
+            response[index++] = 0;
+            response[index++] = 0;
+            response[index++] = 0;
+            response[index++] = 60;
+
+            // Rdlength -> total byte of answer -> for ipv4 -> 4 (x.y.z.q)
+            response[index++] = 0;
+            response[index++] = 4;
+
+            // ip address
+            String ip = record.getIpAddress();
+            String[] parts = ip.split("\\.");
+
+            for (String part : parts) {
+                response[index++] = (byte) Integer.parseInt(part);
+            }
+
         }
     }
 }
