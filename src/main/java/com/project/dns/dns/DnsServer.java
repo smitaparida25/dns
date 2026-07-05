@@ -21,7 +21,28 @@ public class DnsServer {
 
     public void start() throws IOException {
         DatagramPacket datagramPacket = new DatagramPacket(buffer, buffer.length);
-        datagramSocket.receive(datagramPacket);
-        System.out.println("Packet received!");
+        while(true) {
+            datagramSocket.receive(datagramPacket);
+            System.out.println("Packet received!");
+            StringBuilder domainName = new StringBuilder();
+            byte[] data = datagramPacket.getData();
+            int i = 12;
+            while(true){
+                int len = data[i] & 0xFF;
+                if(len == 0){
+                    break;
+                }
+                for(int j = 1; j<=len; j++){
+                    char curr = (char) (data[j+i] & 0xFF);
+                    domainName.append(curr);
+                }
+                domainName.append('.');
+                i = i + len + 1;
+            }
+            if (domainName.length() > 0) {
+                domainName.deleteCharAt(domainName.length() - 1);
+            }
+            System.out.println(domainName.toString());
+        }
     }
 }
