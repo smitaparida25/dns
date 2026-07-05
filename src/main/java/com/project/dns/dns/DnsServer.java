@@ -17,7 +17,7 @@ public class DnsServer {
 
     public DnsServer(DNSRecordRepository dnsRecordRepository) throws SocketException {
         this.dnsRecordRepository = dnsRecordRepository;
-        datagramSocket = new DatagramSocket(8053);
+        datagramSocket = new DatagramSocket(53);
     }
     // storage for the incoming datagram
     private byte[] buffer = new byte[512];

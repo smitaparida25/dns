@@ -21,6 +21,14 @@ public class DnsApplication implements CommandLineRunner {
 	}
 	@Override
 	public void run(String... args) throws Exception {
-		dnsServer.start();
+		Thread dnsThread = new Thread(() -> {
+			try {
+				dnsServer.start();
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
+		});
+		dnsThread.setDaemon(true);
+		dnsThread.start();
 	}
 }
