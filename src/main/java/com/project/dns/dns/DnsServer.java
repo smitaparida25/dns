@@ -1,18 +1,23 @@
 package com.project.dns.dns;
 
+import com.project.dns.repository.DNSRecordRepository;
+import org.springframework.stereotype.Component;
+
 import java.io.IOException;
 import java.net.DatagramPacket;
 import java.net.DatagramSocket;
 import java.net.SocketException;
 
+@Component
 // listen to udp messages
 public class DnsServer {
-    private DatagramSocket datagramSocket;
+    private final DNSRecordRepository dnsRecordRepository;
+    private final DatagramSocket datagramSocket;
 
-    public DnsServer() throws SocketException {
+    public DnsServer(DNSRecordRepository dnsRecordRepository) throws SocketException {
+        this.dnsRecordRepository = dnsRecordRepository;
         datagramSocket = new DatagramSocket(8053);
     }
-
     // storage for the incoming datagram
     private byte[] buffer = new byte[512];
 

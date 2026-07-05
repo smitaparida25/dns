@@ -12,7 +12,5 @@ public class DnsApplication {
 
 	public static void main(String[] args) throws IOException {
 		SpringApplication.run(DnsApplication.class, args);
-		DnsServer server = new DnsServer();
-		server.start();
 	}
 }
